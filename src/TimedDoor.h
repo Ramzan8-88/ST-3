@@ -1,18 +1,18 @@
 // Copyright 2021 GHA Test Team
 
-#ifndef TIMED_DOOR_H
-#define TIMED_DOOR_H
+#ifndef SRC_TIMEDDOOR_H_
+#define SRC_TIMEDDOOR_H_
 
 class TimedDoor;
 
 class TimerClient {
-public:
+ public:
     virtual void Timeout() = 0;
     virtual ~TimerClient() {}
 };
 
 class Door {
-public:
+ public:
     virtual void lock() = 0;
     virtual void unlock() = 0;
     virtual bool isDoorOpened() = 0;
@@ -20,19 +20,19 @@ public:
 };
 
 class DoorTimerAdapter : public TimerClient {
-private:
+ private:
     TimedDoor& door;
-public:
+ public:
     explicit DoorTimerAdapter(TimedDoor&);
     void Timeout() override;
 };
 
 class TimedDoor : public Door {
-private:
+ private:
     DoorTimerAdapter* adapter;
     int iTimeout;
     bool isOpened;
-public:
+ public:
     explicit TimedDoor(int);
     ~TimedDoor();
     bool isDoorOpened() override;
@@ -43,12 +43,12 @@ public:
 };
 
 class Timer {
-private:
+ private:
     TimerClient* client;
     void sleep(int);
-public:
+ public:
     Timer();
     void tregister(int, TimerClient*);
 };
 
-#endif
+#endif  // SRC_TIMEDDOOR_H_
