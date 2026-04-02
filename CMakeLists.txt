@@ -1,13 +1,25 @@
-cmake_minimum_required (VERSION 3.10.2)
-project (ST-3)
+cmake_minimum_required(VERSION 3.10)
+project(TimedDoorSystem)
 
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3 -g")
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Добавляем директории с заголовками
+include_directories(include)
 
-set(tool_dest "bin")
-set(lib_dest "lib")
-set(include_dest "include/")
+# Основной исполняемый файл
+add_executable(timed_door src/main.cpp src/TimedDoor.cpp)
 
-add_subdirectory(src)
-add_subdirectory(test)
+# Тесты
+enable_testing()
+
+# Ищем Google Test
+find_package(GTest REQUIRED)
+include_directories(${GTEST_INCLUDE_DIRS})
+
+# Исполняемый файл для тестов
+add_executable(tests test/tests.cpp src/TimedDoor.cpp)
+target_link_libraries(tests ${GTEST_LIBRARIES} pthread)
+
+# Добавляем тест в CTest
+add_test(NAME TimedDoorTests COMMAND tests)
