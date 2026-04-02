@@ -13,13 +13,17 @@ add_executable(timed_door src/main.cpp src/TimedDoor.cpp)
 # Тесты
 enable_testing()
 
-# Ищем Google Test
+# Google Test + Google Mock (tests use gmock)
 find_package(GTest REQUIRED)
+find_package(Threads REQUIRED)
 include_directories(${GTEST_INCLUDE_DIRS})
 
-# Исполняемый файл для тестов
 add_executable(tests test/tests.cpp src/TimedDoor.cpp)
-target_link_libraries(tests ${GTEST_LIBRARIES} pthread)
+if(TARGET GTest::gmock)
+  target_link_libraries(tests PRIVATE GTest::GTest GTest::gmock Threads::Threads)
+else()
+  target_link_libraries(tests PRIVATE ${GTEST_LIBRARIES} gmock Threads::Threads)
+endif()
 
 # Добавляем тест в CTest
 add_test(NAME TimedDoorTests COMMAND tests)
