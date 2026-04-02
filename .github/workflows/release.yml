@@ -14,4 +14,5 @@ jobs:
     - name: make
       run: cd build && make
     - name: Run Test
-      run: /home/runner/work/ST-3/ST-3/build/test/ST-3.test
+      working-directory: build
+      run: ./tests
